@@ -19,12 +19,8 @@ use App\Models\CarModel;
 
 class ManufacturerController extends Controller
 {
-    /*
-     * Список всех марок, отсортированных по алфавиту.
-     * 
-     * GET /api/manufacturers
-     * Ответ: [{ "id": 1, "name": "Audi" }, { "id": 2, "name": "BMW" }, ...]
-     */
+    /* All manufacturers */
+    
     public function index()
     {
         $manufacturers = Manufacturer::orderBy('name')->get(['id', 'name', 'logo']);
@@ -32,12 +28,8 @@ class ManufacturerController extends Controller
         return response()->json($manufacturers);
     }
 
-    /*
-     * Модели конкретной марки.
-     * 
-     * GET /api/manufacturers/2/models (где 2 = id BMW)
-     * Ответ: [{ "id": 5, "name": "3 Series" }, { "id": 6, "name": "5 Series" }, ...]
-     */
+    /* Models of one manufacturer*/
+
     public function models(Manufacturer $manufacturer)
     {
         $models = $manufacturer->carModels()->orderBy('name')->get(['id', 'name']);

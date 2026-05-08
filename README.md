@@ -1,159 +1,150 @@
-# 🚗 Lietotu automašīnu salons (SPA)
+# ABUY
 
-Mācību fullstack projekts lietotu automašīnu salonam.  
-Projekts ir izstrādāts kā **SPA (Single Page Application)**, izmantojot **React** un **Laravel**.
+Lietoto automašīnu tirdzniecības platforma. Kvalifikācijas darbs Rīgas Valsts tehnikumā.
 
----
+**Production:** https://web-production-9b4b6.up.railway.app
 
-## 🛠️ Tehnoloģijas
+## Funkcijas
 
-### Frontend
-- React.js
-- Vite
-- JavaScript (ES6)
-- CSS
+**Lietotājiem:**
+- Reģistrācija un autentifikācija
+- Sludinājumu pārlūkošana ar filtriem (marka, modelis, cena, gads, dzinējs, kuzov, ātrumkārba)
+- Sludinājumu izveide ar fotoattēliem
+- Favoriti
+- Tērzēšana ar administratoru
+- Pirkuma pieprasījumi un atsauksmes
 
-### Backend
-- Laravel
-- REST API
-- MySQL (Laragon)
+**Administratoriem:**
+- Statistikas dashboard ar diagrammām
+- Lietotāju pārvaldība (bloķēšana, dzēšana)
+- Sludinājumu un atsauksmju moderācija
+- Tērzēšanas pārvaldība
+
+## Tehnoloģijas
+
+**Backend:**
+- PHP 8.3
+- Laravel 12
+- MySQL 8.0
 - Eloquent ORM
+- Laravel Sanctum (token-based auth)
 
----
+**Frontend:**
+- React 19
+- Vite 7
+- Tailwind CSS 3
+- React Router 7
+- Axios
+- Recharts (diagrammas)
+- browser-image-compression
 
-## 📦 Projekta arhitektūra
+**Infrastruktūra:**
+- Railway (hosting + MySQL + persistent storage)
+- GitHub (version control)
 
-Projekts ir veidots kā SPA:
+## Lokāla palaišana
 
-- Laravel piegādā **vienu HTML lapu**
-- React pārvalda visu lietotāja interfeisu
-- Automašīnu dati tiek ielādēti caur API
-- Navigācija un modālie logi darbojas bez lapas pārlādes
+### Priekšnosacījumi
+- PHP 8.3+ ar `pdo_mysql` un `gd` paplašinājumiem
+- MySQL 8.0+
+- Composer 2
+- Node.js 18+
 
-Browser
-↓
-Laravel (HTML + API)
-↓
-React (UI)
+### 1. Klonēt repo
 
-yaml
-Copy code
+```bash
+git clone https://github.com/Killa930/my-project.git
+cd my-project
+```
 
----
+### 2. Backend
 
-## 📁 Projekta struktūra
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-resources/
-└── js/
-├── api/
-│ └── cars.js
-├── components/
-│ ├── Header.jsx
-│ ├── Hero.jsx
-│ ├── CarCard.jsx
-│ └── AuthModal.jsx
-├── pages/
-│ └── Home.jsx
-└── app.jsx
+Izveidot MySQL datubāzi `auto_salon` un norādīt tās datus `.env` failā:
 
-markdown
-Copy code
+```env
+DB_DATABASE=auto_salon
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
----
+Palaist migrācijas un sākotnējos datus:
 
-## 🖥️ Funkcionalitāte
-
-### ✅ Galvenā lapa
-- Galvene ar navigāciju
-- Hero sadaļa ar sveicienu
-- Mini automašīnu katalogs
-
-### ✅ Automašīnu katalogs
-- Dati tiek ielādēti no datubāzes
-- Izmanto API `/api/cars`
-- Attēlotā informācija:
-  - marka
-  - modelis
-  - izlaiduma gads
-  - cena
-  - nobraukums
-  - apraksts
-
-### ✅ Autorizācijas modālais logs (UI)
-- Pogas **Ienākt / Reģistrēties**
-- Modālais logs bez lapas pārlādes
-- Cilņu pārslēgšana
-- Aizvēršana ar:
-  - klikšķi ārpus loga
-  - pogu ✕
-  - taustiņu Esc
-
-⚠️ Šajā posmā autorizācijas un reģistrācijas dati **netiek nosūtīti uz serveri**  
-(modālais logs ir tikai lietotāja interfeiss)
-
----
-
-## 🔌 API
-
-### Automašīnu saraksta iegūšana
-GET /api/cars
-
-css
-Copy code
-
-Atbilde:
-```json
-[
-  {
-    "id": 1,
-    "brand": "Toyota",
-    "model": "Corolla",
-    "year": 2017,
-    "price": 10900,
-    "mileage": 120000,
-    "description": "Uzticams automobilis"
-  }
-]
-🚀 Projekta palaišana
-Backend
-bash
-Copy code
+```bash
+php artisan migrate --seed
+php artisan storage:link
 php artisan serve
-Frontend
-bash
-Copy code
+```
+
+Backend: `http://localhost:8000`
+
+### 3. Frontend
+
+```bash
+npm install
 npm run dev
-Atvērt pārlūkā:
+```
 
-cpp
-Copy code
-http://127.0.0.1:8000
-📌 Pašreizējais stāvoklis
-✔️ React + Laravel savienojums darbojas
-✔️ Automašīnu katalogs no datubāzes
-✔️ SPA arhitektūra
-✔️ Autorizācijas modālais logs (UI)
+Frontend: `http://localhost:5173`
 
-❌ Autentifikācija vēl nav pieslēgta datubāzei
+## Testa lietotāji
 
-🔮 Nākotnes uzlabojumi
-Reāla lietotāju autorizācija un reģistrācija
+| Loma | E-pasts | Parole |
+|---|---|---|
+| Administrators | admin@abuy.lv | password |
+| Lietotājs | user@abuy.lv | password |
 
-Lietotāja sesijas saglabāšana
+## Datubāze
 
-Automašīnas detalizētā lapa
+9 tabulas, normalizētas līdz 3NF:
 
-Meklēšana un filtrēšana
+- `users` — lietotāji
+- `manufacturers` — ražotāji
+- `car_models` — modeļi
+- `cars` — sludinājumi
+- `car_images` — sludinājumu attēli
+- `favorites` — favoriti
+- `transactions` — pirkuma pieteikumi
+- `reviews` — atsauksmes
+- `messages` — tērzēšanas ziņas
 
-Administratora panelis
+## Projekta struktūra
 
-👨‍💻 Autors
-Mācību projekts
-React + Laravel
+```
+my-project/
+├── app/
+│   ├── Http/Controllers/Api/   # 9 kontrolieri
+│   ├── Models/                 # Eloquent modeļi
+│   └── Helpers/                # ProfanityFilter
+├── database/
+│   ├── migrations/             # DB shēma
+│   └── seeders/                # Sākotnējie dati
+├── resources/
+│   ├── js/                     # React aplikācija
+│   │   ├── api/axios.js        # HTTP klients
+│   │   ├── components/
+│   │   ├── context/
+│   │   └── pages/
+│   └── css/app.css
+├── routes/api.php              # API maršruti
+└── .env.example
+```
 
-yaml
-Copy code
+## Drošība
 
----
+- Paroles glabājas ar bcrypt (12 raundi)
+- SQL injection aizsardzība caur Eloquent parametrizāciju
+- XSS aizsardzība ar React auto-escape
+- CSRF aizsardzība ar Sanctum
+- Mass Assignment aizsardzība ar `$fillable`
+- Role-Based Access Control (RBAC) administratīvajām funkcijām
+- HTTPS production režīmā
 
-Ja vēlāk vajadzēs **otru README versiju** (ar īstu autorizāciju vai skolas prasībām) — vienkārši pasaki.urce.org/licenses/MIT).
+## Autors
+
+D. Tumanovs, Rīgas Valsts tehnikums, 2026
