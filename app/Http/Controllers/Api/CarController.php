@@ -52,7 +52,7 @@ class CarController extends Controller
 
         $cars = $query->paginate(12);
 
-        // Цензура описаний в списке
+        // Censure decriptions in the listing
         $cars->getCollection()->transform(function ($car) {
             $car->description = ProfanityFilter::clean($car->description);
             return $car;
@@ -65,7 +65,7 @@ class CarController extends Controller
     {
         $car->load(['carModel.manufacturer', 'images', 'user:id,name,phone,created_at']);
 
-        // Цензура в описании
+        // Censure description 
         $car->description = ProfanityFilter::clean($car->description);
 
         return response()->json($car);
@@ -91,7 +91,7 @@ class CarController extends Controller
         $validated['user_id'] = Auth::id();
         $validated['status'] = 'active';
 
-        // Применяем фильтр к описанию
+        // apply censorship to description before saving
         if (!empty($validated['description'])) {
             $validated['description'] = ProfanityFilter::clean($validated['description']);
         }
@@ -135,7 +135,7 @@ class CarController extends Controller
             'status'        => 'sometimes|in:active,sold,inactive',
         ]);
 
-        // Цензура при обновлении
+        // censure description before updating
         if (!empty($validated['description'])) {
             $validated['description'] = ProfanityFilter::clean($validated['description']);
         }

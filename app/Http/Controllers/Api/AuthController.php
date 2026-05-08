@@ -62,13 +62,8 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-    /*
-     * UPDATE PROFILE — изменение данных профиля
-     * 
-     * Позволяет пользователю изменить имя, телефон и пароль.
-     * Email не меняется (он ключ для авторизации).
-     * Для смены пароля требуется указать текущий пароль.
-     */
+    /* UPDATE PROFILE*/
+
     public function updateProfile(Request $request)
     {
         $user = $request->user();
@@ -81,17 +76,18 @@ class AuthController extends Controller
                 Password::min(8)->mixedCase()->numbers()->symbols()],
         ]);
 
-        // Обновляем имя если передано
+        // name - update if provided
+
         if (isset($validated['name'])) {
             $user->name = $validated['name'];
         }
 
-        // Обновляем телефон (даже если null — разрешаем очистить)
+        // Updating phone
         if ($request->has('phone')) {
             $user->phone = $validated['phone'] ?? null;
         }
 
-        // Смена пароля — проверяем текущий
+        // Password change - only if new_password is provided
         if (!empty($validated['new_password'])) {
             if (!Hash::check($validated['current_password'], $user->password)) {
                 return response()->json([

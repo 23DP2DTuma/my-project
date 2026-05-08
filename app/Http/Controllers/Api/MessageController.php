@@ -34,7 +34,7 @@ class MessageController extends Controller
                     $q->where('sender_id', $user->id)->where('receiver_id', $userId);
                 })->latest()->first();
 
-                // Цензура в превью последнего сообщения
+                // censure last message
                 if ($lastMessage) {
                     $lastMessage->body = ProfanityFilter::clean($lastMessage->body);
                 }
@@ -94,7 +94,7 @@ class MessageController extends Controller
             $q->where('sender_id', $user->id)->where('receiver_id', $myId);
         })->orderBy('created_at')->get();
 
-        // Цензура в каждом сообщении
+        // censure each message
         $messages->each(function ($msg) {
             $msg->body = ProfanityFilter::clean($msg->body);
         });
@@ -119,7 +119,7 @@ class MessageController extends Controller
             return response()->json(['message' => 'Var rakstīt tikai administratoram'], 403);
         }
 
-        // Применяем фильтр перед сохранением
+        // apply filter to message body
         $cleanBody = ProfanityFilter::clean($validated['body']);
 
         $message = Message::create([
@@ -141,10 +141,7 @@ class MessageController extends Controller
         return response()->json(['count' => $count]);
     }
 
-    /*
- * Удалить всю переписку с пользователем (только админ).
- * Используется когда админ решил проблему пользователя.
- */
+    // Only admin can delete conversations
 public function destroy(User $user)
 {
     if (!Auth::user()->isAdmin()) {

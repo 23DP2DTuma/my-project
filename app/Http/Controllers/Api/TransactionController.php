@@ -2,13 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-/*
- * TransactionController — управление darījumi (заявками на покупку)
- * 
- * - index()  → мои darījumi (как покупатель и как продавец)
- * - store()  → создать заявку на покупку
- * - update() → изменить статус (продавец подтверждает/отклоняет)
- */
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;

@@ -2,16 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-/*
- * StatisticsController — статистика для админ-панели
- * 
- * Здесь реализованы требования из задания:
- * - Aprēķinu veikšana (COUNT, AVG, SUM)
- * - Grupēšana (GROUP BY)
- * - Результаты для таблиц и диаграмм
- * 
- * GET /api/statistics
- */
+
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;
@@ -23,15 +14,14 @@ class StatisticsController extends Controller
 {
     public function index()
     {
-        // === ОБЩИЕ ЦИФРЫ ===
 
         $general = [
-            'total_cars' => Car::count(),                                    // Всего объявлений
-            'active_cars' => Car::where('status', 'active')->count(),        // Активных
-            'sold_cars' => Car::where('status', 'sold')->count(),            // Проданных
-            'total_users' => User::count(),                                  // Всего пользователей
-            'avg_price' => round(Car::where('status', 'active')->avg('price'), 2),    // Средняя цена
-            'avg_mileage' => round(Car::where('status', 'active')->avg('mileage')),   // Средний пробег
+            'total_cars' => Car::count(),                                    
+            'active_cars' => Car::where('status', 'active')->count(),        
+            'sold_cars' => Car::where('status', 'sold')->count(),           
+            'total_users' => User::count(),                                  
+            'avg_price' => round(Car::where('status', 'active')->avg('price'), 2),    
+            'avg_mileage' => round(Car::where('status', 'active')->avg('mileage')),   
         ];
 
         // === ОБЪЯВЛЕНИЯ ПО МАРКАМ (для диаграммы) ===

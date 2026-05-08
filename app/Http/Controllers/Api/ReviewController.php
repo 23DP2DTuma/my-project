@@ -22,7 +22,7 @@ class ReviewController extends Controller
             ->latest()
             ->get();
 
-        // Цензура в комментариях при выводе
+        // censure comments in the listing
         $reviews->each(function ($review) {
             $review->comment = ProfanityFilter::clean($review->comment);
         });
@@ -58,7 +58,7 @@ class ReviewController extends Controller
             return response()->json(['message' => 'Atsauksme jau uzrakstīta'], 422);
         }
 
-        // Применяем фильтр к комментарию перед сохранением
+        // apply filter to comment before saving
         $comment = ProfanityFilter::clean($validated['comment']);
 
         $review = Review::create([
